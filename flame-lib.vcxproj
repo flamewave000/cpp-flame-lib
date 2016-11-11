@@ -71,15 +71,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\bash\flame-lib\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\bash\flame-lib\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\bash\flame-lib\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\bash\flame-lib\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -148,26 +152,15 @@
   <ItemGroup>
     <ClInclude Include="include\bool_set.h" />
     <ClInclude Include="include\cli.h" />
-    <ClInclude Include="include\daemon.h" />
     <ClInclude Include="include\event.h" />
     <ClInclude Include="include\ini.h" />
-    <ClInclude Include="include\log.h" />
-    <ClInclude Include="include\net\client.h" />
-    <ClInclude Include="include\net\connection.h" />
-    <ClInclude Include="include\net\server.h" />
-    <ClInclude Include="include\net\status_codes.h" />
     <ClInclude Include="include\object.h" />
-    <ClInclude Include="include\pid_file.h" />
+    <ClInclude Include="include\str.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\cli.cpp" />
     <ClCompile Include="src\ini.cpp" />
-    <ClCompile Include="src\log.cpp" />
-    <ClCompile Include="src\net\client.cpp" />
-    <ClCompile Include="src\net\connection.cpp" />
-    <ClCompile Include="src\net\server.cpp" />
-    <ClCompile Include="src\pid_file.cpp" />
     <ClCompile Include="src\str.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

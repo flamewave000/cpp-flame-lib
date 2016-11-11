@@ -32,3 +32,6 @@
 *.db
 *.suo
 .vs/
+Debug/
+Release/
+obj/

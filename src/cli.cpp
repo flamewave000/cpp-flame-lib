@@ -1,4 +1,4 @@
-#include "../util/str.h"
+#include "str.h"
 #include "cli.h"
 #include <queue>
 #include <iostream>
