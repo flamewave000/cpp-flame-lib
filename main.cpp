@@ -1,0 +1,11 @@
+#include <iostream>
+
+using namespace std;
+
+
+int main(int argc, const char *argv[]) {
+
+
+	system("PAUSE");
+	return 0;
+}

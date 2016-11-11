@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="include\net">
+      <UniqueIdentifier>{3aea878c-a086-43d3-942e-3418e56750ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\net">
+      <UniqueIdentifier>{431b8ff0-31c4-43c6-a337-34a120be5e4a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\bool_set.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\cli.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\daemon.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\event.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ini.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\log.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\object.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\pid_file.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\client.h">
+      <Filter>include\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\connection.h">
+      <Filter>include\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\server.h">
+      <Filter>include\net</Filter>
+    </ClInclude>
+    <ClInclude Include="include\net\status_codes.h">
+      <Filter>include\net</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\cli.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ini.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\log.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\pid_file.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\str.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\client.cpp">
+      <Filter>src\net</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\connection.cpp">
+      <Filter>src\net</Filter>
+    </ClCompile>
+    <ClCompile Include="src\net\server.cpp">
+      <Filter>src\net</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
