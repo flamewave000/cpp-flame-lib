@@ -1,5 +1,5 @@
-#ifndef _EVENT_H
-#define _EVENT_H 1
+#ifndef _EVENT_
+#define _EVENT_ 1
 
 #ifndef _GLIBCXX_VECTOR
 #ifndef _VECTOR_

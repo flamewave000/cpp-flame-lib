@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _OBJECT_H
-#define _OBJECT_H 1
+#ifndef _OBJECT_
+#define _OBJECT_ 1
 
 #ifndef _GLIBCXX_VECTOR
 #ifndef _VECTOR_
