@@ -2,16 +2,19 @@
 #define _EVENT_H 1
 
 #ifndef _GLIBCXX_VECTOR
+#ifndef _VECTOR_
 #include <vector>
 #endif
-#ifndef _GLIBCXX_FUNCTIONAL
-#include <functional>
 #endif
 #ifndef _GLIBCXX_MEMORY
+#ifndef _MEMORY_
 #include <memory>
 #endif
-#ifndef _GLIBCXX_MUTEX
-#include <mutex>
+#endif
+#ifndef _GLIBCXX_ALGORITHM
+#ifndef _ALGORITHM_
+#include <algorithm>
+#endif
 #endif
 
 namespace std
@@ -52,7 +55,7 @@ namespace std
 		virtual void invoke(_arg_types... __args) { _method(__args...); }
 		virtual bool operator==(const __delegate &other) {
 			if (const static_delegate* pother = dynamic_cast<const static_delegate*>(&other)) {
-				operator==(*pother);
+				return operator==(*pother);
 			}
 			return false;
 		}
@@ -94,36 +97,52 @@ namespace std
 	};
 
 	template<typename ... _arg_types>
-	class event : public __delegate<_arg_types...> {
+	using delegate_ptr = std::shared_ptr<__delegate<_arg_types...>>;
+
+	template<typename ... _arg_types>
+	class event final : public __delegate<_arg_types...> {
 #pragma region instance variables
 	private:
-		vector<shared_ptr<__delegate<_arg_types...>>> _subscribers;
+		vector<delegate_ptr<_arg_types...>> _subscribers;
+#pragma endregion
+
+
+#pragma region constructors
+	public:
+		event() {}
+		event(const nullptr_t&) {}
 #pragma endregion
 
 
 #pragma region overrides
 	public:
 		virtual void invoke(_arg_types... __args) {
-			for (size_t c = 0, size = _subscribers.size(); c < size; c++) {
+			size_t size = _subscribers.size();
+			if (size == 0) throw std::runtime_error("std::event<> is null");
+			for (size_t c = 0; c < size; c++) {
 				_subscribers[c]->invoke(__args...);
 			}
 		}
-		virtual bool operator==(const __delegate &other) throw() { throw logic_error("not implemented"); }
+		virtual bool operator==(const __delegate &other) { throw logic_error("not implemented"); }
 #pragma endregion
 
 
+#pragma region operator overloads
 	public:
-		void operator+=(const shared_ptr<__delegate> &sub) {
-			_subscribers.push_back(sub);
+		inline void operator=(const std::nullptr_t &) { _subscribers.clear(); }
+		inline void operator+=(const delegate_ptr<_arg_types...> &sub) { _subscribers.push_back(sub); }
+		inline void operator+=(__delegate<_arg_types...>* sub) { _subscribers.push_back(delegate_ptr<_arg_types...>(sub)); }
+		inline void operator-=(__delegate<_arg_types...>* sub) { operator-=(delegate_ptr<_arg_types...>(sub)); }
+		void operator-=(const delegate_ptr<_arg_types...> &sub) {
+			const auto end = _subscribers.end();
+			_subscribers.erase(
+				std::remove_if(_subscribers.begin(), end,
+					[&sub](const delegate_ptr<_arg_types...> &l)-> bool { return *l == *sub; }),
+				end);
 		}
-		void operator-=(const shared_ptr<__delegate> &sub) {
-			for (int c = 0, size = _subscribers.size(); c < size; c++) {
-				auto ind = _subscribers.begin() + c;
-				if (**ind == *sub) {
-					_subscribers.erase(ind);
-				}
-			}
-		}
+		inline bool operator==(const std::nullptr_t&) { return _subscribers.size() == 0; }
+		inline bool operator!=(const std::nullptr_t&) { return _subscribers.size() != 0; }
+#pragma endregion
 	};
 } // namespace std
 #endif
