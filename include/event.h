@@ -16,65 +16,113 @@
 
 namespace std
 {
-	template<typename ... _ArgTypes>
-	class event
-	{
+	template<typename ... _arg_types>
+	class __delegate {
+#pragma region constructors
+	protected:
+		__delegate() {}
 	public:
-		// Expected function pointer for this iteration of event
-		typedef function<void(_ArgTypes...)> delegate;
-		// Expected delegate pointer for this iteration of event
-		typedef shared_ptr<delegate> delegate_ptr;
+		virtual ~__delegate() {}
+#pragma endregion
+
+
+#pragma region public methods
+	public:
+		virtual void invoke(_arg_types... __args) = 0;
+		virtual bool operator==(const __delegate &other) = 0;
+#pragma endregion
+	};
+
+	template<typename ... _arg_types>
+	class static_delegate final : public __delegate<_arg_types...> {
+#pragma region instance variables
 	private:
-		vector<delegate_ptr> _listeners;
+		void(*_method)(_arg_types...);
+#pragma endregion
+
+
+#pragma region constructors
 	public:
-		// invokes the event
-		virtual void operator()(void * owner, _ArgTypes... __args)
-		{
-			invoke(owner, __args...);
+		static_delegate(void(*method)(_arg_types...)) : _method(method) {}
+#pragma endregion
+
+
+#pragma region public methods
+	public:
+		virtual void invoke(_arg_types... __args) { _method(__args...); }
+		virtual bool operator==(const __delegate &other) {
+			if (const static_delegate* pother = dynamic_cast<const static_delegate*>(&other)) {
+				operator==(*pother);
+			}
+			return false;
 		}
-		virtual void operator+=(delegate_ptr listener) {
-			_listeners.push_back(listener);
+		virtual bool operator==(const static_delegate &other) { return _method == other._method; }
+#pragma endregion
+	};
+
+	template<class _type, typename ... _arg_types>
+	class method_delegate final : public __delegate<_arg_types...> {
+#pragma region instance variables
+	private:
+		_type* _instance;
+		void(_type::*_method)(_arg_types...);
+#pragma endregion
+
+
+#pragma region constructors
+	public:
+		method_delegate(_type * instance, void(_type::*method)(_arg_types...))
+			: _instance(instance), _method(method) {}
+#pragma endregion
+
+
+#pragma region public methods
+	public:
+		virtual void invoke(_arg_types... __args) {
+			(*_instance.*_method)(__args...);
 		}
-		virtual void operator-=(delegate_ptr listener) {
-			for (auto it = _listeners.begin(), end = _listeners.end(); it != end; it++) {
-				if (*it == listener) {
-					_listeners.erase(it);
-					break;
+		virtual bool operator==(const __delegate &other) {
+			if (const method_delegate* pother = dynamic_cast<const method_delegate*>(&other)) {
+				return operator==(*pother);
+			}
+			return false;
+		}
+		virtual bool operator==(const method_delegate &other) {
+			return _instance == other._instance && _method == other._method;
+		}
+#pragma endregion
+	};
+
+	template<typename ... _arg_types>
+	class event : public __delegate<_arg_types...> {
+#pragma region instance variables
+	private:
+		vector<shared_ptr<__delegate<_arg_types...>>> _subscribers;
+#pragma endregion
+
+
+#pragma region overrides
+	public:
+		virtual void invoke(_arg_types... __args) {
+			for (size_t c = 0, size = _subscribers.size(); c < size; c++) {
+				_subscribers[c]->invoke(__args...);
+			}
+		}
+		virtual bool operator==(const __delegate &other) throw() { throw logic_error("not implemented"); }
+#pragma endregion
+
+
+	public:
+		void operator+=(const shared_ptr<__delegate> &sub) {
+			_subscribers.push_back(sub);
+		}
+		void operator-=(const shared_ptr<__delegate> &sub) {
+			for (int c = 0, size = _subscribers.size(); c < size; c++) {
+				auto ind = _subscribers.begin() + c;
+				if (**ind == *sub) {
+					_subscribers.erase(ind);
 				}
 			}
-		}
-		virtual void invoke(void * owner, _ArgTypes... __args) {
-			for (auto listener : this->_listeners) {
-				(*listener)(__args...);
-			}
-		}
-	};
-	template<typename ... _ArgTypes>
-	class thread_safe_event : public event<_ArgTypes...>
-	{
-	private:
-		recursive_mutex _mutex;
-	public:
-		// invokes the event
-		virtual void operator()(void * owner, _ArgTypes... __args)
-		{
-			lock_guard<recursive_mutex> lock(_mutex);
-			event<_ArgTypes...>::operator()(owner, __args...);
-		}
-		virtual void operator+=(typename event<_ArgTypes...>::delegate_ptr listener)
-		{
-			lock_guard<recursive_mutex> lock(_mutex);
-			event<_ArgTypes...>::operator+=(listener);
-		}
-		virtual void operator-=(typename event<_ArgTypes...>::delegate_ptr listener)
-		{
-			lock_guard<recursive_mutex> lock(_mutex);
-			event<_ArgTypes...>::operator-=(listener);
-		}
-		virtual void invoke(void * owner, _ArgTypes... __args)
-		{
-			lock_guard<recursive_mutex> lock(_mutex);
-			event<_ArgTypes...>::invoke(owner, __args...);
 		}
 	};
 } // namespace std
