@@ -2,8 +2,16 @@
 #ifndef _OBJECT_H
 #define _OBJECT_H 1
 
-#include <memory>
+#ifndef _GLIBCXX_VECTOR
+#ifndef _VECTOR_
 #include <vector>
+#endif
+#endif
+#ifndef _GLIBCXX_MEMORY
+#ifndef _MEMORY_
+#include <memory>
+#endif
+#endif
 
 namespace std {
 	class object;
