@@ -77,7 +77,6 @@ namespace std {
 		};
 #pragma endregion
 
-
 #pragma region instance variables
 	private:
 		/*the std::type::info for the runtime host class this std::type represents*/
@@ -88,7 +87,6 @@ namespace std {
 		std::vector<info> _protocols;
 #pragma endregion
 
-
 #pragma region properties
 	public:
 		/*returns the std::type::info for the host class*/
@@ -97,12 +95,10 @@ namespace std {
 		inline const type &get_base_type() const { return *_base; }
 #pragma endregion
 
-
 #pragma region constructors
 	private:
 		type(const info &type_info, const std::shared_ptr<type> &base) : _info(type_info), _base(base) {}
 #pragma endregion
-
 
 #pragma region public methods
 	public:
@@ -129,7 +125,6 @@ namespace std {
 		}
 #pragma endregion
 
-
 #pragma region operator overloads
 	public:
 		inline bool operator==(const type &other) { return _info == other._info; }
@@ -137,7 +132,6 @@ namespace std {
 		inline bool operator==(const type &other) const { return _info == other._info; }
 		inline bool operator!=(const type &other) const { return _info != other._info; }
 #pragma endregion
-
 
 #pragma region friends
 		friend object;
@@ -163,6 +157,7 @@ namespace std {
 	/*short hand helper for extending std::object as the base*/
 #define ROOT_BASE public std::object
 
+
 	/*the root base class of all typed classes*/
 	class object {
 #pragma region instance variables
@@ -171,13 +166,11 @@ namespace std {
 		std::shared_ptr<type> _type;
 #pragma endregion
 
-
 #pragma region constructors
 	public:
 		object() { __reg_type<object>(); }
 		virtual ~object() {}
 #pragma endregion
-
 
 #pragma region protected methods
 	protected:
@@ -198,8 +191,7 @@ namespace std {
 			}
 		}
 #pragma endregion
-
-
+		
 #pragma region public methods
 	public:
 		/*returns true if this class is an instance of the provided object*/
@@ -215,7 +207,6 @@ namespace std {
 		virtual const char * to_string() const { return _type->_info._name; }
 #pragma endregion
 	};
-
 
 #define PROTOCOL(p_name) class p_name {protected:p_name(){}public
 #define PROTOEND };
