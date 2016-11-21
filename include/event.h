@@ -34,7 +34,7 @@ namespace std
 		/*invokes the function contained inside this delegate*/
 		virtual void invoke(_arg_types... __args) = 0;
 		/*compares this delegate to another*/
-		virtual bool operator==(const __delegate &other) = 0;
+		virtual bool operator==(const __delegate<_arg_types...> &other) = 0;
 #pragma endregion
 	};
 	/*a helper type for handling a shared pointer to a std::__delegate*/
@@ -62,7 +62,7 @@ namespace std
 		/*invokes the static/global function contained inside this delegate*/
 		virtual void invoke(_arg_types... __args) { _func(__args...); }
 		/*compares this std::__delegate to another using the std::static_delegate comparison*/
-		virtual bool operator==(const __delegate &other) {
+		virtual bool operator==(const __delegate<_arg_types...> &other) {
 			if (const static_delegate* pother = dynamic_cast<const static_delegate*>(&other)) {
 				return operator==(*pother);
 			}
@@ -99,7 +99,7 @@ namespace std
 			(*_instance.*_method)(__args...);
 		}
 		/*compares this std::__delegate to another using the std::method_delegate comparison*/
-		virtual bool operator==(const __delegate &other) {
+		virtual bool operator==(const __delegate<_arg_types...> &other) {
 			if (const method_delegate* pother = dynamic_cast<const method_delegate*>(&other)) {
 				return operator==(*pother);
 			}
@@ -143,7 +143,7 @@ namespace std
 			}
 		}
 		/*will throw a std::logic_error of "not implemented"*/
-		virtual bool operator==(const __delegate &other) { throw logic_error("not implemented"); }
+		virtual bool operator==(const __delegate<_arg_types...> &other) { throw logic_error("not implemented"); }
 #pragma endregion
 
 #pragma region operator overloads
