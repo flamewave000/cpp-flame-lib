@@ -181,7 +181,7 @@ namespace str
 		/// Provides the number of parameters which have been provided so far.
 		/// </summary>
 		/// <returns>Number of parameters provided so far.</returns>
-		inline size_t param_count() {
+		inline size_t count() {
 			return _params.size();
 		}
 		/// <summary>
@@ -195,7 +195,7 @@ namespace str
 		/// <summary>
 		/// Clears all parameters provided up until now.
 		/// </summary>
-		inline void clear_params() {
+		inline void clear() {
 			_params.clear();
 		}
 		/// <summary>
