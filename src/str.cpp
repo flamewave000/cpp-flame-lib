@@ -6,7 +6,32 @@ using namespace std;
 
 namespace str
 {
+#pragma region globals
 	const std::string whitespace = " \n\r\t";
+
+	size_t find_first_of_pat(const std::string &str, const std::string &pattern)
+	{
+		size_t c = 0, i = 0, size = str.size(), psize = pattern.size();
+		if (size == 0 || psize == 0) {
+			return string::npos;
+		}
+		size_t pos = string::npos;
+		for (; c < size; c++) {
+			if (pattern[0] == str[c]) {
+				pos = c;
+				for (i = 0; i < psize; i++) {
+					if (pattern[i] != str[c + i]) {
+						pos = string::npos;
+						break;
+					}
+				}
+				if (pos != string::npos) {
+					return pos;
+				}
+			}
+		}
+		return string::npos;
+	}
 
 	vector<string> split(string str, const char &delim)
 	{
@@ -75,17 +100,11 @@ namespace str
 	}
 	string replace(const string &str, const string &pattern, const string &replacement)
 	{
-		string result = "";
+		string result(str);
 		size_t c = 0, psize = pattern.size();
-		size_t offset = 0;
-		while ((c = str.find_first_of(pattern)) != str.npos)
+		while ((c = find_first_of_pat(result, pattern)) != result.npos)
 		{
-			result += str.substr(offset, c);
-			result += replacement;
-			offset = c + psize;
-		}
-		if (offset < str.size()) {
-			result += str.substr(offset);
+			result = result.replace(c, psize, replacement);
 		}
 		return result;
 	}
@@ -132,4 +151,25 @@ namespace str
 		}
 		return result;
 	}
+#pragma endregion
+
+
+	
+#pragma region class format
+	format::__end format::end = format::__end();
+
+	std::string format::str() const {
+		std::string result = _buffer;
+		std::string index;
+		char buff[11] = { 0,0,0,0,0,0,0,0,0,0,0 };
+		for (size_t c = 0, size = _params.size(); c < size; c++) {
+			sprintf(buff, "%i", c);
+			index = '{';
+			index += buff;
+			index += '}';
+			result = str::replace(result, index, _params[c]);
+		}
+		return result;
+	}
+#pragma endregion
 }

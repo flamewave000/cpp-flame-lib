@@ -12,6 +12,9 @@
 #include <memory>
 #endif
 #endif
+#ifndef _STR_
+#include "str.h"
+#endif
 
 namespace std {
 	class object;
@@ -157,6 +160,8 @@ namespace std {
 	/*short hand helper for extending std::object as the base*/
 #define ROOT_BASE public std::object
 
+#define IFACE(return_type, method_name, param_types...) virtual return_type method_name(param_types) = 0
+
 
 	/*the root base class of all typed classes*/
 	class object {
@@ -208,8 +213,21 @@ namespace std {
 #pragma endregion
 	};
 
-#define PROTOCOL(p_name) class p_name {protected:p_name(){}public
+#define PROTOCOL(p_name) class p_name{public:virtual~p_name(){}protected:p_name(){}public
 #define PROTOEND };
+
+#pragma region str::format operator overloads for object
+	inline str::format &operator%(str::format &fmt, const shared_ptr<object> &obj) {
+		return fmt % obj->to_string();
+	}
+	inline str::format &operator%(str::format &fmt, const object * obj) {
+		return fmt % obj->to_string();
+	}
+	inline str::format &operator%(str::format &fmt, const object &obj) {
+		return fmt % obj.to_string();
+	}
+#pragma endregion
+
 
 #undef TYPE_INFO
 }
