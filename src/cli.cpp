@@ -154,16 +154,38 @@ int CLI::run(const vector<string> &argv)
 	}
 	return _startDelegate(unknown);
 }
+
+std::string & word_wrap(std::string &line, const size_t &max_length) {
+	for (size_t c = 0, count = 0, size = line.size(); c < size; c++)
+	{
+		if (line[c] == '\n')
+			count = 0;
+		else
+			count += 1;
+		if (count == max_length)
+		{
+			for (size_t reverse = 0; reverse < count; reverse++) {
+				if (line[(c - reverse) + 1] == ' ') {
+					c = (c - reverse) + 1;
+					break;
+				}
+			}
+			line[c] = '\n';
+			count = 0;
+		}
+	}
+	return line;
+}
+
 void CLI::showHelp(string error)
 {
+	static const size_t MAX_WIDTH = 80;
 	if (error.size() != 0)
 	{
 		cerr << error << '\n';
 	}
-	if (_description.size() == 0)
-		printf("usage: %s [options]\n", _program_name.c_str());
-	else
-		cout << _description << '\n';
+	string desc = _description.size() == 0 ? format("usage: {0} [options]\n") % _program_name.c_str() % format::end : _description + '\n';
+	cerr << word_wrap(desc, MAX_WIDTH);
 	size_t shortLen = 0, longLen = 0, snameLen = 0, lnameLen = 0;
 	for (auto flag : _flags)
 	{
@@ -180,10 +202,7 @@ void CLI::showHelp(string error)
 	}
 	string shortName;
 	string longName;
-	string desc;
 	string cmdStr;
-	vector<size_t> newlineIndecies;
-	size_t count, max;
 	for (auto flag : _flags)
 	{
 		shortName = flag->shortName.size() != 0 && trim(flag->shortName).size() ? flag->shortName : "";
@@ -194,32 +213,11 @@ void CLI::showHelp(string error)
 			<< rpad(shortName, shortLen + 2)
 			<< rpad(longName, longLen + 2);
 		cmdStr = sstream.str();
-
-		newlineIndecies.clear();
-		count = 0;
-		max = 80 - cmdStr.size();
-		for (size_t c = 0, size = desc.size(); c < size; c++)
-		{
-			if (desc[c] == '\n')
-				count = 0;
-			else
-				count += 1;
-			if (count == max)
-			{
-				newlineIndecies.push_back(c);
-				count = 0;
-			}
-		}
-		count = 0;
-		for (auto index : newlineIndecies)
-		{
-			desc.insert(desc.begin() + index, '\n');
-			count += 1;
-		}
-		vector<string> lines = split(desc, '\n');
+		vector<string> lines = split(word_wrap(desc, MAX_WIDTH - cmdStr.size()), '\n');
 		desc = join(lines, rpad("\n", cmdStr.size() + 1));
-		cerr << cmdStr << desc << endl;
+		cerr << cmdStr << desc << '\n';
 	}
+	cerr.flush();
 }
 std::string CLI::getProgramName() {
 	return _program_name;

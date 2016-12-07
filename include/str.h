@@ -49,17 +49,19 @@ namespace str
 		return width > 0 ? str.insert(size, width, pad) : str;
 	}
 
-	inline std::string ltrim(const std::string &str)
+	inline std::string ltrim(std::string str)
 	{
 		if (str.size() == 0) return str;
-		return str.substr(str.find_first_not_of(whitespace) + 1);
+		str.erase(str.begin(), str.begin() + str.find_first_not_of(whitespace));
+		return str;
 	}
-	inline std::string rtrim(const std::string &str)
+	inline std::string rtrim(std::string str)
 	{
 		if (str.size() == 0) return str;
-		return str.substr(str.find_last_not_of(whitespace) + 1);
+		str.erase(str.begin() + str.find_last_not_of(whitespace) + 1, str.end());
+		return str;
 	}
-	inline std::string trim(std::string str)
+	inline std::string trim(const std::string &str)
 	{
 		return rtrim(ltrim(str));
 	}
