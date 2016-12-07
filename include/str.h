@@ -49,17 +49,15 @@ namespace str
 		return width > 0 ? str.insert(size, width, pad) : str;
 	}
 
-	inline std::string ltrim(std::string str)
+	inline std::string ltrim(const std::string &str)
 	{
 		if (str.size() == 0) return str;
-		str.erase(str.begin(), str.begin() + str.find_first_not_of(whitespace));
-		return str;
+		return str.substr(str.find_first_not_of(whitespace) + 1);
 	}
-	inline std::string rtrim(std::string str)
+	inline std::string rtrim(const std::string &str)
 	{
 		if (str.size() == 0) return str;
-		str.erase(str.begin() + str.find_last_not_of(whitespace) + 1, str.end());
-		return str;
+		return str.substr(str.find_last_not_of(whitespace) + 1);
 	}
 	inline std::string trim(std::string str)
 	{
@@ -86,6 +84,7 @@ namespace str
 #pragma region internal classes
 	private:
 		struct __end {};
+		struct __endclr {};
 #pragma endregion
 
 
@@ -95,6 +94,10 @@ namespace str
 		/// Signifies the end of a string format. Will cause the formatter to return a string at the end.
 		/// </summary>
 		static __end end;
+		/// <summary>
+		/// Signifies the end of a string format. Will cause the formatter to return a string at the end, then clear the provided parameters.
+		/// </summary>
+		static __endclr endclr;
 #pragma endregion
 
 
@@ -105,7 +108,6 @@ namespace str
 #pragma endregion
 
 
-
 #pragma region constructors
 	public:
 		/// <summary>
@@ -114,7 +116,6 @@ namespace str
 		/// <param name="format">Format string</param>
 		format(std::string format) : _buffer(format) {}
 #pragma endregion
-
 
 
 #pragma region operator overloads
@@ -169,8 +170,11 @@ namespace str
 			_params.push_back(str);
 			return *this;
 		}
-		inline std::string operator%(const __end &str) const {
+		inline std::string operator%(const __end &e) const {
 			return this->str();
+		}
+		inline std::string operator%(const __endclr &e) {
+			return this->strclr();
 		}
 #pragma endregion
 
@@ -204,6 +208,11 @@ namespace str
 		/// <returns>Formatted string.</returns>
 		std::string str() const;
 		/// <summary>
+		/// Builds the formatted string using the previously provided parameters, then clears the parameters.
+		/// </summary>
+		/// <returns>Formatted string.</returns>
+		std::string strclr();
+		/// <summary>
 		/// Generates a specialized string representation of the provided value <paramref name="arg"/>.
 		/// </summary>
 		/// <param name="fmt">The specialized format the value is to be formatted to. (i.e "%#.2f")</param>
@@ -211,10 +220,11 @@ namespace str
 		/// <param name="buff_size">The size of buffer to use for the underlying <seealso cref="snprintf"/> call.</param>
 		/// <returns>The formatted string.</returns>
 		template<typename T>
-		static std::string spec(const char * fmt, const T &arg, const size_t &buff_size = 32) const {
+		static std::string spec(const char * fmt, const T &arg, const size_t &buff_size = 32) {
 			std::string buff;
 			buff.resize(buff_size + 1);
-			snprintf(buff.data(), buff.size(), fmt, arg);
+			int written = snprintf(const_cast<char*>(buff.data()), buff.size(), fmt, arg);
+			buff = buff.substr(0, written);
 			return buff;
 		}
 #pragma endregion

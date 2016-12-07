@@ -154,13 +154,13 @@ namespace str
 #pragma endregion
 
 
-	
 #pragma region class format
 	format::__end format::end = format::__end();
+	format::__endclr format::endclr = format::__endclr();
 
-	std::string format::str() const {
-		std::string result = _buffer;
-		std::string index;
+	string format::str() const {
+		string result = _buffer;
+		string index;
 		char buff[11] = { 0,0,0,0,0,0,0,0,0,0,0 };
 		for (size_t c = 0, size = _params.size(); c < size; c++) {
 			sprintf(buff, "%i", c);
@@ -169,6 +169,11 @@ namespace str
 			index += '}';
 			result = str::replace(result, index, _params[c]);
 		}
+		return result;
+	}
+	string format::strclr() {
+		string result = str();
+		clear();
 		return result;
 	}
 #pragma endregion
