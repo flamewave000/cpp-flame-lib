@@ -1,4 +1,4 @@
-#include "str.h"
+#include "../util/str.h"
 #include "cli.h"
 #include <queue>
 #include <iostream>
@@ -130,7 +130,8 @@ int CLI::run(const vector<string> &argv)
 			{
 				if (contains(rawArg, '='))
 				{
-					data = join(split(rawArg, '='), '=');
+					auto tokens = split(rawArg, '=');
+					data = tokens.size() > 1 ? tokens[1] : "";
 				}
 				else
 				{
