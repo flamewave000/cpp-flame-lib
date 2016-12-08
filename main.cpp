@@ -53,7 +53,7 @@ int main(int argc, const char *argv[]) {
 		so.myEvent.invoke(1);// will print twice
 	so.myEvent -= new static_delegate<int>(&test);
 	if (so.myEvent != nullptr)
-		so.myEvent.invoke(2);// will print once
+		so.myEvent(2);// will print once
 	so.myEvent -= new method_delegate<myObj, int>(&mo, &myObj::func);
 	if (so.myEvent != nullptr)// will fail as there are no more
 		so.myEvent.invoke(3);// will not be printed
