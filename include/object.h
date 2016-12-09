@@ -12,8 +12,8 @@
 #include <memory>
 #endif
 #endif
-#ifndef _STR_
-#include "str.h"
+#ifndef _STREXT_H
+#include "strext.h"
 #endif
 
 namespace std {
@@ -217,13 +217,13 @@ namespace std {
 #define PROTOEND };
 
 #pragma region str::format operator overloads for object
-	inline str::format &operator%(str::format &fmt, const shared_ptr<object> &obj) {
+	inline format &operator%(format &fmt, const shared_ptr<object> &obj) {
 		return fmt % obj->to_string();
 	}
-	inline str::format &operator%(str::format &fmt, const object * obj) {
+	inline format &operator%(format &fmt, const object * obj) {
 		return fmt % obj->to_string();
 	}
-	inline str::format &operator%(str::format &fmt, const object &obj) {
+	inline format &operator%(format &fmt, const object &obj) {
 		return fmt % obj.to_string();
 	}
 #pragma endregion

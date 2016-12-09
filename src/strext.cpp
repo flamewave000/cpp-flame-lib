@@ -1,10 +1,9 @@
-#include "str.h"
+#include "strext.h"
 #include <cstring>
 #include <sstream>
 
-using namespace std;
 
-namespace str
+namespace std
 {
 #pragma region globals
 	const std::string whitespace = " \n\r\t";

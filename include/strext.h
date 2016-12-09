@@ -1,6 +1,6 @@
 #pragma once
-#ifndef _STR_
-#define _STR_ 1
+#ifndef _STREXT_H
+#define _STREXT_H 1
 
 #ifndef _STRING_
 #include <string>
@@ -10,7 +10,7 @@
 #endif
 
 
-namespace str
+namespace std
 {
 #pragma region globals
 	extern const std::string whitespace;

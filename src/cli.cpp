@@ -1,4 +1,4 @@
-#include "../util/str.h"
+#include "strext.h"
 #include "cli.h"
 #include <queue>
 #include <iostream>
@@ -6,7 +6,6 @@
 
 
 using namespace std;
-using namespace str;
 
 
 #pragma region _flag Definition

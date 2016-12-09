@@ -1,4 +1,4 @@
-#include "str.h"
+#include "strext.h"
 #include "ini.h"
 #include <fstream>
 #include <iostream>
@@ -49,7 +49,7 @@ ini_section_collection std::ini_readf(const char *filename, ostream &_log)
 	string line;
 	for (int line_num = 1; getline(stream, line); line_num++)
 	{
-		str::trim(line);
+		trim(line);
 		if (line.size() <= 0) {
 			continue;
 		}

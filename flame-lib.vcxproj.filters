@@ -13,6 +13,12 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="include\json">
+      <UniqueIdentifier>{5d5d5761-974e-4bef-b5f6-a3553220530e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\json">
+      <UniqueIdentifier>{912e4c5f-722d-4d5f-b30d-b7c1685e1486}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\bool_set.h">
@@ -33,6 +39,27 @@
     <ClInclude Include="include\str.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\json\jarray.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\jnumber.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\jobject.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\json.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\jvalue.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\jbase.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
+    <ClInclude Include="include\json\json_errors.h">
+      <Filter>include\json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\cli.cpp">
@@ -45,5 +72,17 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\json\jarray.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\json\jnumber.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\json\jobject.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="src\json\jvalue.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
