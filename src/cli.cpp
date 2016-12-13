@@ -234,7 +234,7 @@ string CLI::getArg(string arg)
 	{
 		return string(nullptr);
 	}
-	return str::contains(arg, '=') ? str::split(arg, '=')[0] : arg;
+	return contains(arg, '=') ? split(arg, '=')[0] : arg;
 }
 Flag CLI::getFlag(string name)
 {

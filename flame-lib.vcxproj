@@ -166,7 +166,7 @@
     <ClInclude Include="include\json\json_errors.h" />
     <ClInclude Include="include\json\jvalue.h" />
     <ClInclude Include="include\object.h" />
-    <ClInclude Include="include\str.h" />
+    <ClInclude Include="include\strext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
@@ -176,7 +176,7 @@
     <ClCompile Include="src\json\jnumber.cpp" />
     <ClCompile Include="src\json\jobject.cpp" />
     <ClCompile Include="src\json\jvalue.cpp" />
-    <ClCompile Include="src\str.cpp" />
+    <ClCompile Include="src\strext.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

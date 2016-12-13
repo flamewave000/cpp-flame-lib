@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS 1
 #include "strext.h"
 #include <cstring>
 #include <sstream>
@@ -162,11 +163,11 @@ namespace std
 		string index;
 		char buff[11] = { 0,0,0,0,0,0,0,0,0,0,0 };
 		for (size_t c = 0, size = _params.size(); c < size; c++) {
-			sprintf(buff, "%i", c);
+			sprintf(buff, "%zd", c);
 			index = '{';
 			index += buff;
 			index += '}';
-			result = str::replace(result, index, _params[c]);
+			result = std::replace(result, index, _params[c]);
 		}
 		return result;
 	}
@@ -177,3 +178,4 @@ namespace std
 	}
 #pragma endregion
 }
+#undef _CRT_SECURE_NO_WARNINGS

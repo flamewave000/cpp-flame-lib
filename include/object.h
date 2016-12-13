@@ -160,7 +160,7 @@ namespace std {
 	/*short hand helper for extending std::object as the base*/
 #define ROOT_BASE public std::object
 
-#define IFACE(return_type, method_name, param_types...) virtual return_type method_name(param_types) = 0
+#define IFACE(return_type, method_name, ...) virtual return_type method_name(__VAR_ARGS__) = 0
 
 
 	/*the root base class of all typed classes*/
@@ -216,7 +216,7 @@ namespace std {
 #define PROTOCOL(p_name) class p_name{public:virtual~p_name(){}protected:p_name(){}public
 #define PROTOEND };
 
-#pragma region str::format operator overloads for object
+#pragma region std::format operator overloads for object
 	inline format &operator%(format &fmt, const shared_ptr<object> &obj) {
 		return fmt % obj->to_string();
 	}

@@ -65,6 +65,17 @@ namespace std
 	{
 		return rtrim(ltrim(str));
 	}
+
+	inline bool stob(std::string str) {
+		str = trim(str);
+		return str == "true" || str == "True" || str == "1";
+	}
+	inline int8_t stobytec(std::string str) {
+		return (int8_t)stol(str);
+	}
+	inline uint8_t stoubyte(std::string str) {
+		return (uint8_t)stoul(str);
+	}
 #pragma endregion
 
 

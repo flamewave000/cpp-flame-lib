@@ -1,6 +1,7 @@
 #include <iostream>
 #include <object.h>
 #include <event.h>
+#include "json\json.h"
 
 using namespace std;
 
@@ -69,6 +70,22 @@ int main(int argc, const char *argv[]) {
 	cout << "sizeof std::type            " << sizeof(std::type) << endl;
 	cout << "sizeof std::type::info      " << sizeof(std::type::info) << endl;
 	cout << "sizeof std::type::info::uid " << sizeof(std::type::info::uid) << endl;
+
+
+	json::jvalue value;
+	value.parse("[\"[hello, \", \"world]\\\\\", 42,\n true, null]");
+	json::jarray array = value.as_array();
+	cout << array[0].as_string() << '\n';
+	cout << array[1].as_string() << '\n';
+	cout << array[2].as_number().to_int32() << '\n';
+	cout << (array[3].as_number().to_bool() ? "true" : "false") << '\n';
+
+	value.parse("{\"hello\": \"world\", \"I am\" : 42, \"wassup?\": [ 1, 2, 3, 4, 5 ], \"obj!\" : { \"yo\" : true} }");
+	json::jobject obj = value.as_object();
+	cout << obj["hello"].as_string() << '\n';
+	cout << obj["I am"].as_number().to_int32() << '\n';
+	cout << obj["wassup?"].as_array()[3].as_number().to_int32() << '\n';
+	cout << (obj["obj!"].as_object()["yo"].as_number().to_bool() ? "true" : "false") << '\n';
 
 	system("PAUSE");
 	return 0;
