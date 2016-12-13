@@ -57,11 +57,10 @@ ini_section_collection std::ini_readf(const char *filename, ostream &_log)
 			string section = extract_section(line);
 			if (cur_section.second.size() > 0) {
 				if (result.find(cur_section.first) != result.end()) {
-					_log << "duplicate section '"
-						<< cur_section.first
-						<< "' found on line "
-						<< line_num
-						<< ", overriding previous"
+					_log << (format("duplicate section '{0}' found on line {1}, overriding previous")
+						% cur_section.first
+						% line_num
+						% format::end)
 						<< endl;
 				}
 				result[cur_section.first] = cur_section.second;
@@ -74,19 +73,16 @@ ini_section_collection std::ini_readf(const char *filename, ostream &_log)
 				pair<string, string> kvp = get_kvp(line);
 				if (cur_section.second.find(kvp.first) != cur_section.second.end())
 				{
-					_log << "duplicate key '"
-						<< kvp.first
-						<< "' found on line "
-						<< line_num
-						<< ", overriding previous"
+					_log << (format("duplicate key '{0}' found on line {1}, overriding previous")
+						% kvp.first
+						% line_num
+						% format::end)
 						<< endl;
 				}
 				cur_section.second[kvp.first] = kvp.second;
 			}
 			catch (invalid_argument &e) {
-				stringstream str;
-				str << "Error at line " << line_num << ": invalid line is not a section header or a key-value pair";
-				throw invalid_argument(str.str());
+				throw invalid_argument(format("Error at line {0}: invalid line is not a section header or a key-value pair") % line_num % format::end);
 			}
 		}
 	}
