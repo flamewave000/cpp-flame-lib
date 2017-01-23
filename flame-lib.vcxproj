@@ -167,6 +167,7 @@
     <ClInclude Include="include\json\jvalue.h" />
     <ClInclude Include="include\object.h" />
     <ClInclude Include="include\strext.h" />
+    <ClInclude Include="safevar.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

@@ -2,6 +2,7 @@
 #include <object.h>
 #include <event.h>
 #include "json\json.h"
+#include "safevar.h"
 
 using namespace std;
 
@@ -86,6 +87,14 @@ int main(int argc, const char *argv[]) {
 	cout << obj["I am"].as_number().to_int32() << '\n';
 	cout << obj["wassup?"].as_array()[3].as_number().to_int32() << '\n';
 	cout << (obj["obj!"].as_object()["yo"].as_number().to_bool() ? "true" : "false") << '\n';
+
+
+
+	safe_var<myObj> svi;
+	auto ref = svi.lock();
+	//var_ref<int> vri;// = *ref;
+	(*ref)->func(42);
+	(**ref).func(42);
 
 	system("PAUSE");
 	return 0;

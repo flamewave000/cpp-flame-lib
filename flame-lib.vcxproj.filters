@@ -60,6 +60,9 @@
     <ClInclude Include="include\strext.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="safevar.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\cli.cpp">
