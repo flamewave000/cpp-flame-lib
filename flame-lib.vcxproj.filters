@@ -63,6 +63,9 @@
     <ClInclude Include="safevar.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="include\linq.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\cli.cpp">
