@@ -4,13 +4,19 @@
 #define _LINQ_H
 
 #ifndef _VECTOR_
+#ifndef _GLIBCXX_VECTOR
 #include <vector>
 #endif
+#endif
 #ifndef _FUNCTIONAL_
+#ifndef _GLIBCXX_FUNCTIONAL
 #include <functional>
 #endif
+#endif
 #ifndef _ALGORITHM_
+#ifndef _GLIBCXX_ALGORITHM
 #include <algorithm>
+#endif
 #endif
 
 
@@ -107,12 +113,21 @@ namespace linq {
 #endif
 
 	public:
+		template<class _Ret>
+		using conversion = ::std::function<_Ret(const _Ty&)>;
+		typedef ::std::function<bool(const _Ty&)> conditional;
+		template<class _Ty2>
+		using comparison = ::std::function<bool(const _Ty&, const _Ty2&)>;
+		template<class _Ty2, class _Ret>
+		using merger = ::std::function<_Ret(const _Ty&, const _Ty2&)>;
+
+	public:
 		/// <summary>Performs an item selection which is expected to transform the data in some way and return a new array.</summary>
 		/// <param name="selector">Lambda which defines how each item is transformed into the new type.</param>
 		/// <param name="result">The array to be filled with the new items.</param>
 		/// <typeparam name="_Ret">The new type being created and returned for the new array.</typeparam>
 		template<class _Ret>
-		void select(const ::std::function<_Ret(const _Ty&)> &selector, array<_Ret> &result) const {
+		void select(const conversion<_Ret> &selector, array<_Ret> &result) const {
 			result.resize(this->size());
 			for (::std::size_t c = 0, l = this->size(); c < l; c++) {
 				result[c] = selector((*this)[c]);
@@ -126,7 +141,7 @@ namespace linq {
 		/// <typeparam name="_Ret">The new type being created and returned for the new array.</typeparam>
 		/// <returns>The new array of transformed items.</returns>
 		template<class _Ret>
-		inline array<_Ret> select(const ::std::function<_Ret(const _Ty&)> &selector) const {
+		inline array<_Ret> select(const conversion<_Ret> &selector) const {
 			array<_Ret> result(this->size());
 			select(selector, result);
 			return result;
@@ -137,13 +152,13 @@ namespace linq {
 		/// </summary>
 		/// <param name="conditional">The lambda which determines if an item is to be added to the new list.</param>
 		/// <returns>The new list of filtered items.</returns>
-		array<_Ty> where(const ::std::function<bool(const _Ty&)> conditional) const {
+		array<_Ty> where(const conditional condition) const {
 			// Record of elements to keep
 			::std::vector<size_t> keep;
 			// Loop through elements to see which are being kept and which are to be thrown
 			for (::std::size_t c = 0, l = this->size(); c < l; c++) {
 				// If we are to keep the element
-				if (conditional((*this)[c])) {
+				if (condition((*this)[c])) {
 					// Add the element's index to the 'keep' list
 					keep.push_back(c);
 				}
@@ -189,7 +204,7 @@ namespace linq {
 		/// <typeparam name="_Ret">The type to be returned in the new merged array.</typeparam>
 		/// <returns>New array of merged items.</returns>
 		template<class _Ty2, class _Ret>
-		array<_Ret> join(const array<_Ty2> &arr, const ::std::function<_Ret(const _Ty&, const _Ty2&)> merge, const ::std::function<bool(const _Ty&, const _Ty2&)> on) const {
+		array<_Ret> join(const array<_Ty2> &arr, const merger<_Ty2, _Ret> merge, const comparison<_Ty2> on) const {
 			array<_Ret> merged;
 			for (auto first : *this) {
 				for (auto second : arr) {
@@ -208,7 +223,7 @@ namespace linq {
 		/// <typeparam name="_Ty2">The type contained in the array being joined.</typeparam>
 		/// <returns>New array of paired items.</returns>
 		template<class _Ty2>
-		inline array<merge_pair<_Ty, _Ty2>> join(const array<_Ty2> &arr, const ::std::function<bool(const _Ty&, const _Ty2&)> on) const {
+		inline array<merge_pair<_Ty, _Ty2>> join(const array<_Ty2> &arr, const comparison<_Ty2> on) const {
 			return join<_Ty2, merge_pair<_Ty, _Ty2>>(arr, [](auto left, auto right)->merge_pair<_Ty, _Ty2> { return { left, right }; }, on);
 		}
 	};
@@ -231,7 +246,7 @@ namespace linq {
 	/// </summary>
 	template<class _Ty> inline array<_Ty> from(const array<_Ty> &arr) { return arr; }
 
-/// <summary>All LINQ queries must be finished with this macro.</summary>
+	/// <summary>All LINQ queries must be finished with this macro.</summary>
 #define END )
 
 /// <summary>Used with <see cref="ORDERBY"/> as a predefined ascending sort.</summary>
