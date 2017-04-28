@@ -14,40 +14,66 @@
 #endif
 
 
-namespace std {
-	// TEMPLATE STRUCT more
-	template<class _Ty = void>
-	struct more
-	{	// functor for operator<
-		typedef _Ty first_argument_type;
-		typedef _Ty second_argument_type;
-		typedef bool result_type;
-
-		constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const
-		{	// apply operator< to operands
-			return (_Left > _Right);
-		}
-	};
-	// TEMPLATE STRUCT SPECIALIZATION more
-	template<>
-	struct more<void>
-	{	// transparent functor for operator<
-		typedef int is_transparent;
-
-		template<class _Ty1, class _Ty2>
-		constexpr auto operator()(_Ty1&& _Left, _Ty2&& _Right) const
-			-> decltype(static_cast<_Ty1&&>(_Left) < static_cast<_Ty2&&>(_Right))
-		{	// transparently apply operator< to operands
-			return (static_cast<_Ty1&&>(_Left) > static_cast<_Ty2&&>(_Right));
-		}
-	};
-}
-
 namespace linq {
+	namespace _inner_linw {
+		// TEMPLATE STRUCT more
+		template<class _Ty = void>
+		struct more
+		{	// functor for operator<
+			typedef _Ty first_argument_type;
+			typedef _Ty second_argument_type;
+			typedef bool result_type;
+
+			constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const
+			{	// apply operator< to operands
+				return (_Left > _Right);
+			}
+		};
+		// TEMPLATE STRUCT SPECIALIZATION more
+		template<>
+		struct more<void>
+		{	// transparent functor for operator<
+			typedef int is_transparent;
+
+			template<class _Ty1, class _Ty2>
+			constexpr auto operator()(_Ty1&& _Left, _Ty2&& _Right) const
+				-> decltype(static_cast<_Ty1&&>(_Left) > static_cast<_Ty2&&>(_Right))
+			{	// transparently apply operator< to operands
+				return (static_cast<_Ty1&&>(_Left) > static_cast<_Ty2&&>(_Right));
+			}
+		};
+		// TEMPLATE STRUCT more
+		template<class _Ty = void>
+		struct less
+		{	// functor for operator<
+			typedef _Ty first_argument_type;
+			typedef _Ty second_argument_type;
+			typedef bool result_type;
+
+			constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const
+			{	// apply operator< to operands
+				return (_Left < _Right);
+			}
+		};
+		// TEMPLATE STRUCT SPECIALIZATION more
+		template<>
+		struct less<void>
+		{	// transparent functor for operator<
+			typedef int is_transparent;
+
+			template<class _Ty1, class _Ty2>
+			constexpr auto operator()(_Ty1&& _Left, _Ty2&& _Right) const
+				-> decltype(static_cast<_Ty1&&>(_Left) < static_cast<_Ty2&&>(_Right))
+			{	// transparently apply operator< to operands
+				return (static_cast<_Ty1&&>(_Left) < static_cast<_Ty2&&>(_Right));
+			}
+		};
+	}
+
 	/// <summary>predicate used for sorting objects in ascending order</summary>
-	::std::less<> ascending;
+	_inner_linw::less<> ascending;
 	/// <summary>predicate used for sorting objects in descending order</summary>
-	::std::more<> descending;
+	_inner_linw::more<> descending;
 
 	template<class _Left, class _Right>
 	struct merge_pair {
@@ -62,6 +88,7 @@ namespace linq {
 	template<class _Ty>
 	class array : public ::std::vector<_Ty> {
 	public:
+#ifdef _VECTOR_
 		array() : vector() {}
 		array(const ::std::size_t &_Count) : vector(_Count) {}
 		array(const ::std::vector<_Ty>&_Vec) : vector(_Vec) {}
@@ -69,6 +96,15 @@ namespace linq {
 		array(::std::initializer_list<_Ty> _Ilist) : vector(_Ilist) {}
 		template<class _Iter, class = ::std::enable_if_t<::std::_Is_iterator<_Iter>::value>>
 		array(_Iter _First, _Iter _Last, const _Alloc& _Al = _Alloc()) : vector(_First, _Last, _Al) {}
+#elif _STL_VECTOR_H
+		array() : ::std::vector<_Ty>() {}
+		array(::std::size_t __n) : ::std::vector<_Ty>(__n) {}
+		array(const ::std::vector<_Ty>&__x) : ::std::vector<_Ty>(__x) {}
+		array(::std::vector<_Ty>&& __x) : ::std::vector<_Ty>(__x) {}
+		array(::std::initializer_list<_Ty> __l) : ::std::vector<_Ty>(__l) {}
+		template<typename _InputIterator, typename = std::_RequireInputIter<_InputIterator>>
+		array(_InputIterator __first, _InputIterator __last) : ::std::vector<_Ty>(__first, __last) {}
+#endif
 
 	public:
 		/// <summary>Performs an item selection which is expected to transform the data in some way and return a new array.</summary>
@@ -78,7 +114,7 @@ namespace linq {
 		template<class _Ret>
 		void select(const ::std::function<_Ret(const _Ty&)> &selector, array<_Ret> &result) const {
 			result.resize(this->size());
-			for (::std::size_t c = 0, l = size(); c < l; c++) {
+			for (::std::size_t c = 0, l = this->size(); c < l; c++) {
 				result[c] = selector((*this)[c]);
 			}
 		}
@@ -91,7 +127,7 @@ namespace linq {
 		/// <returns>The new array of transformed items.</returns>
 		template<class _Ret>
 		inline array<_Ret> select(const ::std::function<_Ret(const _Ty&)> &selector) const {
-			array<_Ret> result(size());
+			array<_Ret> result(this->size());
 			select(selector, result);
 			return result;
 		}
@@ -105,7 +141,7 @@ namespace linq {
 			// Record of elements to keep
 			::std::vector<size_t> keep;
 			// Loop through elements to see which are being kept and which are to be thrown
-			for (::std::size_t c = 0, l = size(); c < l; c++) {
+			for (::std::size_t c = 0, l = this->size(); c < l; c++) {
 				// If we are to keep the element
 				if (conditional((*this)[c])) {
 					// Add the element's index to the 'keep' list
@@ -119,7 +155,7 @@ namespace linq {
 				if (keep[c] != last) {
 					// swap elements
 					const _Ty &right = (*this)[keep[c]];
-					result[c] = _STD move(right);
+					result[c] = ::std::move(right);
 				}
 				last++;
 			}
@@ -135,7 +171,7 @@ namespace linq {
 		/// <returns>A reference to this list (used for chaining calls).</returns>
 		template<class _Pr>
 		inline array<_Ty>& orderby(_Pr pred) {
-			::std::sort(begin(), end(), pred);
+			::std::sort(this->begin(), this->end(), pred);
 			return *this;
 		}
 
@@ -195,7 +231,7 @@ namespace linq {
 	/// </summary>
 	template<class _Ty> inline array<_Ty> from(const array<_Ty> &arr) { return arr; }
 
-	/// <summary>All LINQ queries must be finished with this macro.</summary>
+/// <summary>All LINQ queries must be finished with this macro.</summary>
 #define END )
 
 /// <summary>Used with <see cref="ORDERBY"/> as a predefined ascending sort.</summary>
