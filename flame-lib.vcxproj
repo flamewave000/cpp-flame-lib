@@ -165,7 +165,6 @@
     <ClInclude Include="include\json\json.h" />
     <ClInclude Include="include\json\json_errors.h" />
     <ClInclude Include="include\json\jvalue.h" />
-    <ClInclude Include="include\linq.h" />
     <ClInclude Include="include\object.h" />
     <ClInclude Include="include\strext.h" />
     <ClInclude Include="safevar.h" />
