@@ -7,7 +7,7 @@
 namespace std
 {
 #pragma region globals
-	const std::string whitespace = " \n\r\t";
+	const std::string whitespace = " \n\r\t\v\f";
 
 	size_t find_first_of_pat(const std::string &str, const std::string &pattern)
 	{
@@ -150,6 +150,56 @@ namespace std
 			*((char*)c) = replacement;
 		}
 		return result;
+	}
+
+	string str2lower(string str) {
+		for (size_t c = 0, size = str.size(); c < size; c++) {
+			if (str[c] >= 'A' && str[c] <= 'Z') {
+				str[c] = str[c] ^ ' ';
+			}
+		}
+		return str;
+	}
+	string str2upper(string str) {
+		for (size_t c = 0, size = str.size(); c < size; c++) {
+			if (str[c] >= 'a' && str[c] <= 'z') {
+				str[c] = str[c] | ' ';
+			}
+		}
+		return str;
+	}
+
+	string ftos(string path) {
+		FILE * file = fopen(path.c_str(), "r");
+		if (file != nullptr) {
+			char buff[256];
+			memset(buff, 0, 256);
+			size_t read = 0;
+			string result = "";
+			while (true) {
+				read = fread(buff, sizeof(char), 256, file);
+				if (read <= 0) {
+					break;
+				}
+				result += string(buff, read);
+			}
+			return move(result);
+		}
+		return "";
+	}
+	string ftos(FILE* file) {
+		char buff[256];
+		memset(buff, 0, 256);
+		size_t read = 0;
+		string result = "";
+		while (true) {
+			read = fread(buff, sizeof(char), 256, file);
+			if (read <= 0) {
+				break;
+			}
+			result += string(buff, read);
+		}
+		return move(result);
 	}
 #pragma endregion
 

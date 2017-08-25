@@ -5,7 +5,7 @@
 #include "json\json.h"
 #include "safevar.h"
 #define LINQ_USE_MACROS 1
-#include "linq.h"
+//#include "linq.h"
 
 using namespace std;
 
@@ -67,8 +67,6 @@ int main(int argc, const char *argv[]) {
 	if (test.instanceof(class_info<object>())) {
 		cout << test.to_string() << endl;
 	}
-
-
 
 	cout << "sizeof std::object          " << sizeof(std::object) << endl;
 	cout << "sizeof std::type            " << sizeof(std::type) << endl;
