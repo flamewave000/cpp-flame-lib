@@ -20,6 +20,9 @@
 #ifndef _GLIBCXX_FUNCTIONAL
 #include <functional>
 #endif
+#ifndef _GLIBCXX_IOSTREAM
+#include <iostream>
+#endif
 
 
 typedef enum _data
@@ -91,7 +94,7 @@ public:
 public:
 	int run(const int &argc, const char* argv[]);
 	int run(const std::vector<std::string> &argv);
-	void showHelp(std::string error = "");
+	void showHelp(std::string error = "", std::ostream &out = std::cerr);
 	std::string getProgramName();
 	std::string getDescription();
 #pragma endregion

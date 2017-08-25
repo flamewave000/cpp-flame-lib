@@ -196,7 +196,7 @@ namespace std {
 			}
 		}
 #pragma endregion
-		
+
 #pragma region public methods
 	public:
 		/*returns true if this class is an instance of the provided object*/
@@ -214,6 +214,7 @@ namespace std {
 	};
 
 #define PROTOCOL(p_name) class p_name{public:virtual~p_name(){}protected:p_name(){}public
+#define PROTOCOL_IMP(p_name, ...) class p_name:__VA_ARGS__{public:virtual~p_name(){}protected:p_name(){}public
 #define PROTOEND };
 
 #pragma region std::format operator overloads for object
@@ -230,6 +231,6 @@ namespace std {
 
 
 #undef TYPE_INFO
-}
+	}
 
 #endif

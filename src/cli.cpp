@@ -1,7 +1,6 @@
 #include "strext.h"
 #include "cli.h"
 #include <queue>
-#include <iostream>
 #include <sstream>
 
 
@@ -176,15 +175,15 @@ std::string & word_wrap(std::string &line, const size_t &max_length) {
 	return line;
 }
 
-void CLI::showHelp(string error)
+void CLI::showHelp(string error, ostream &out)
 {
 	static const size_t MAX_WIDTH = 80;
 	if (error.size() != 0)
 	{
-		cerr << error << '\n';
+		out << error << '\n';
 	}
-	string desc = _description.size() == 0 ? format("usage: {0} [options]\n") % _program_name.c_str() % format::end : _description + '\n';
-	cerr << word_wrap(desc, MAX_WIDTH);
+	string desc = _description.size() == 0 ? "usage: {0} [options]\n"_f % _program_name.c_str() % format::end : _description + '\n';
+	out << word_wrap(desc, MAX_WIDTH);
 	size_t shortLen = 0, longLen = 0, snameLen = 0, lnameLen = 0;
 	for (auto flag : _flags)
 	{
@@ -214,9 +213,9 @@ void CLI::showHelp(string error)
 		cmdStr = sstream.str();
 		vector<string> lines = split(word_wrap(desc, MAX_WIDTH - cmdStr.size()), '\n');
 		desc = join(lines, rpad("\n", cmdStr.size() + 1));
-		cerr << cmdStr << desc << '\n';
+		out << cmdStr << desc << '\n';
 	}
-	cerr.flush();
+	out.flush();
 }
 std::string CLI::getProgramName() {
 	return _program_name;

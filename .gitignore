@@ -32,6 +32,7 @@
 *.db
 *.suo
 *.opendb
+*.user
 .vs/
 Debug/
 Release/
