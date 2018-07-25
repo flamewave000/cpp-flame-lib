@@ -33,9 +33,6 @@
     <ClInclude Include="include\ini.h">
       <Filter>include</Filter>
     </ClInclude>
-    <ClInclude Include="include\object.h">
-      <Filter>include</Filter>
-    </ClInclude>
     <ClInclude Include="include\json\jarray.h">
       <Filter>include\json</Filter>
     </ClInclude>
@@ -56,9 +53,6 @@
     </ClInclude>
     <ClInclude Include="include\json\json_errors.h">
       <Filter>include\json</Filter>
-    </ClInclude>
-    <ClInclude Include="include\strext.h">
-      <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="safevar.h">
       <Filter>include</Filter>
@@ -83,9 +77,6 @@
     </ClCompile>
     <ClCompile Include="src\json\jvalue.cpp">
       <Filter>src\json</Filter>
-    </ClCompile>
-    <ClCompile Include="src\strext.cpp">
-      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
